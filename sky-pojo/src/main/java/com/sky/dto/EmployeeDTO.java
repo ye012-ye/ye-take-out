@@ -17,6 +17,8 @@ public class EmployeeDTO implements Serializable {
 
     private String sex;
 
-    private String idNumber;
+    private String idNumber;// 身份证号
 
 }
+//生成请求数据JSON格式
+ //{"username":"admin","name":"admin","phone":"12345678901","sex":"1","idNumber":"123456789012345678"}
