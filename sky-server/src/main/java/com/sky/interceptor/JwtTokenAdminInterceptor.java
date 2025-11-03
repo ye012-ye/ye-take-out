@@ -7,9 +7,10 @@ import com.sky.utils.JwtUtil;
 import io.jsonwebtoken.Claims;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.messaging.handler.HandlerMethod;
 import org.springframework.stereotype.Component;
+import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -34,11 +35,13 @@ public class JwtTokenAdminInterceptor implements HandlerInterceptor {
      * @throws Exception
      */
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        //判断当前拦截到的是Controller的方法还是其他资源
+//        判断当前拦截到的是Controller的方法还是其他资源
         if (!(handler instanceof HandlerMethod)) {
             //当前拦截到的不是动态方法，直接放行
             return true;
         }
+
+
         //1、从请求头中获取令牌
         String token = request.getHeader(jwtProperties.getAdminTokenName());
 
@@ -47,7 +50,7 @@ public class JwtTokenAdminInterceptor implements HandlerInterceptor {
             log.info("jwt校验:{}", token);
             Claims claims = JwtUtil.parseJWT(jwtProperties.getAdminSecretKey(), token);
             Long empId = Long.valueOf(claims.get(JwtClaimsConstant.EMP_ID).toString());
-            log.info("当前员工id：", empId);
+            log.info("当前员工id：{}", empId);
             BaseContext.setCurrentId(empId);
             //3、通过，放行
             return true;
@@ -56,5 +59,13 @@ public class JwtTokenAdminInterceptor implements HandlerInterceptor {
             response.setStatus(401);
             return false;
         }
+    }
+    /**
+     * 请求处理之后，视图渲染之前
+     */
+    @Override
+    public void postHandle (HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
+        log.info("postHandle");
+        BaseContext.removeCurrentId();
     }
 }

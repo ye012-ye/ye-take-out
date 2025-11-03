@@ -59,6 +59,7 @@ public class AutoFillAspect {
                 setUpdateUser.invoke(object, BaseContext.getCurrentId());
                 setCreateUser.invoke(object, BaseContext.getCurrentId());
                 setCreateTime.invoke(object, LocalDateTime.now());
+                log.info("object {}",object);
             }else {
                 setUpdateTime.invoke(object, LocalDateTime.now());
                 setUpdateUser.invoke(object, BaseContext.getCurrentId());

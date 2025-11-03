@@ -44,6 +44,7 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
 
     /**
      * 通过knife4j生成接口文档
+     *
      * @return
      */
     @Bean
@@ -64,6 +65,7 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
 
     /**
      * 设置静态资源映射
+     *
      * @param registry
      */
     protected void addResourceHandlers(ResourceHandlerRegistry registry) {
@@ -73,12 +75,13 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
 
     @Override
     protected void extendMessageConverters(List<HttpMessageConverter<?>> converters) {
-        log.info("扩展消息转换器..." );
+        log.info("扩展消息转换器...");
         //创建消息转换器对象
         MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
         //需要为转换器设置一个对象转换器，对象转换器可以将java对象转为json数据
         converter.setObjectMapper(new JacksonObjectMapper());
         //将上面的消息转换器对象追加到mvc框架的转换器集合中
-        converters.add(0,converter);//0表最高优先级
+        converters.add(0, converter);//0表最高优先级
     }
+
 }
