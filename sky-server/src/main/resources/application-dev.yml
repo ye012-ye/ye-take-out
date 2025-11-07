@@ -11,3 +11,12 @@ sky:
     endpoint: https://oss-cn-beijing.aliyuncs.com
     bucket-name: ye-java
     region: cn-beijing
+
+  redis:
+    host: localhost
+    port: 6379
+    database: 1
+
+  wechat:
+    appid: wx915491def729d4cc
+    secret: 91b760e2fe0862bd46493a7e78fa5cae
