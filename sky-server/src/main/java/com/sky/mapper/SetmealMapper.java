@@ -1,9 +1,15 @@
 package com.sky.mapper;
 
+import com.github.pagehelper.Page;
+import com.sky.annotation.AutoFill;
+import com.sky.dto.SetmealPageQueryDTO;
 import com.sky.entity.Setmeal;
+import com.sky.enumeration.OperationType;
 import com.sky.vo.DishItemVO;
+import com.sky.vo.SetmealVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 
@@ -12,6 +18,7 @@ public interface SetmealMapper {
 
     /**
      * 根据分类id查询套餐的数量
+     *
      * @param id
      * @return
      */
@@ -20,6 +27,7 @@ public interface SetmealMapper {
 
     /**
      * 动态条件查询套餐
+     *
      * @param setmeal
      * @return
      */
@@ -27,6 +35,7 @@ public interface SetmealMapper {
 
     /**
      * 根据套餐id查询菜品选项
+     *
      * @param setmealId
      * @return
      */
@@ -34,4 +43,48 @@ public interface SetmealMapper {
             "from setmeal_dish sd left join dish d on sd.dish_id = d.id " +
             "where sd.setmeal_id = #{setmealId}")
     List<DishItemVO> getDishItemBySetmealId(Long setmealId);
+
+    /**
+     * 分页查询
+     */
+    Page<Setmeal> page(SetmealPageQueryDTO setmealPageQueryDTO);
+
+    /**
+     * 新增
+     *
+     * @param setmeal
+     */
+    @AutoFill(value = OperationType.INSERT)
+    void insert(Setmeal setmeal);
+
+    /**
+     * 根据id查询
+     */
+    @Select("select s.*,c.name categoryName from setmeal s left join category c on s.category_id = c.id   " +
+            "where s.id = #{id}")
+    SetmealVO getById(Long id);
+
+    /**
+     * 修改
+     *
+     * @param setmeal
+     */
+    @AutoFill(value = OperationType.UPDATE)
+    void update(Setmeal setmeal);
+
+    /**
+     * 修改店铺状态
+     * @param status
+     * @param id
+     */
+    @Update("update setmeal set status = #{status} where id = #{id}")
+    void updateStatus(Integer status, Long id);
+
+    /**
+     * 批量删除
+     * @param ids
+     */
+    void batchByIds(List<Long> ids);
 }
+
+

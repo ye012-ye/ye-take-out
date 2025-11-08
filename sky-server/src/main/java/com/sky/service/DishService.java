@@ -45,4 +45,16 @@ public interface DishService {
      * @return
      */
     List<DishVO> listWithFlavor(Dish dish);
+
+    /**
+     * 根据categoryId查询
+     */
+    List<DishVO> getBYWithFlavorCategoryID(Long categoryId);
+
+    /**
+     * 修改当前菜品状态
+     * @param status
+     * @return
+     */
+    void updateByStatus(Integer status,Long id);
 }
