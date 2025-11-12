@@ -111,4 +111,7 @@ public class Orders implements Serializable {
 
     //订单详细
     private List<OrderDetail> orderDetailList;
+
+    //订单包含的菜品名称
+    private String orderDishes;
 }

@@ -36,7 +36,7 @@
         where id = #{id}
     </update>
     <select id="page" resultType="com.sky.entity.Orders">
-        select * from orders 
+        select * from orders
         <where>
             <if test="beginTime != null">
                 AND order_time >= #{beginTime}  <!-- 数据库字段名：begin_time -->
@@ -49,6 +49,7 @@
             <if test="phone != null">and phone like concat('%',#{phone},'%')</if>
             <if test="number != null">and number like concat('%',#{number},'%')</if>
         </where>
+        order by order_time desc
     </select>
     <select id="getById" resultType="com.sky.entity.Orders">
         select * from orders
@@ -84,5 +85,32 @@
         </where>
 
 
+    </select>
+    <select id="countByMap" resultType="java.lang.Integer">
+        select count(id) from orders
+        <where>
+            <if test="begin != null">
+                and order_time &gt; #{begin}
+            </if>
+            <if test="end != null">
+                and order_time &lt; #{end}
+            </if>
+            <if test="status != null">
+                and status = #{status}
+            </if>
+        </where>
+    </select>
+    <select id="getSalesTop10" resultType="com.sky.dto.GoodsSalesDTO">
+        select od.name as name,count(od.number) as number from order_detail od,orders o
+        where od.order_id = o.id
+        <if test="begin != null">
+            and o.order_time &gt; #{begin}
+        </if>
+        <if test="end != null">
+            and o.order_time &lt; #{end}
+        </if>
+        group by od.name
+        order by number desc
+        limit 0,10
     </select>
 </mapper>

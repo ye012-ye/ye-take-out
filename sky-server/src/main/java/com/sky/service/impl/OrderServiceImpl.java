@@ -22,6 +22,7 @@ import com.sky.result.PageResult;
 import com.sky.service.OrderService;
 import com.sky.vo.OrderStatisticsVO;
 import com.sky.vo.OrderSubmitVO;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -116,7 +117,18 @@ public class OrderServiceImpl implements OrderService {
         PageHelper.startPage(ordersPageQueryDTO.getPage(),ordersPageQueryDTO.getPageSize());
 
         Page<Orders> ordersPage = orderMapper.page(ordersPageQueryDTO);
-        return new PageResult(ordersPage.getTotal(),ordersPage.getResult());
+
+        List<Orders> result = ordersPage.getResult();
+
+        for (Orders orders : result) {
+            List<String> orderDetailNameList = new ArrayList<>();
+            ArrayList<OrderDetail> orderDetails = orderDetailMapper.getByOrdersId(orders.getId());
+            for (OrderDetail orderDetail : orderDetails) {
+                orderDetailNameList.add(orderDetail.getName() + "×" + orderDetail.getNumber());
+            }
+            orders.setOrderDishes(StringUtils.join(orderDetailNameList,","));
+        }
+        return new PageResult(ordersPage.getTotal(),result);
     }
 
     /**
