@@ -22,4 +22,9 @@ public interface ShoppingCartService {
      * 清空
      */
     void cleanShoppingCart();
+
+    /**
+     * 删除
+     */
+    void delete(ShoppingCartDTO shoppingCartDTO);
 }
